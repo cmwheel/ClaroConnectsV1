@@ -169,9 +169,9 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            Mapping the physical future
+            Every autonomous fleet needs
             <br />
-            of autonomy.
+            a physical footprint.
           </motion.h1>
 
           <motion.p
@@ -184,9 +184,8 @@ export default function HeroSection() {
               ease: [0.25, 0.1, 0.25, 1],
             }}
           >
-            Spatial analysis and infrastructure advisory for the autonomous era.
-            We help investors and operators find where to build next across
-            RoboTaxi and freight networks.
+            We find the sites, corridors, and infrastructure plays before
+            they&apos;re obvious.
           </motion.p>
 
           <motion.div
