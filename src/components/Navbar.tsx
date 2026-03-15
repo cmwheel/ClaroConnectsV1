@@ -37,7 +37,7 @@ export default function Navbar() {
         <div className="flex items-center gap-8">
           <details className="group relative">
             <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary">
-              Infrastructure Research
+              Solutions
               <svg
                 className="h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-180"
                 viewBox="0 0 20 20"

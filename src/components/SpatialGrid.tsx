@@ -27,6 +27,23 @@ const ROUTE_STEPS: [number, number][] = [
   [19, 20],
 ];
 
+const CORRIDOR_CELLS: [number, number][] = [
+  [8, 6], [8, 7], [9, 6], [9, 7], [10, 7],
+  [9, 8], [10, 9], [11, 10], [12, 11], [13, 12],
+  [14, 13], [14, 14], [15, 15], [16, 16], [17, 17],
+  [18, 18], [18, 19], [19, 20],
+  [19, 21], [19, 22], [20, 21], [20, 22], [18, 20], [21, 22],
+];
+
+function corridorDistance(row: number, col: number): number {
+  let min = Infinity;
+  for (const [cr, cc] of CORRIDOR_CELLS) {
+    const d = Math.sqrt((row - cr) ** 2 + (col - cc) ** 2);
+    if (d < min) min = d;
+  }
+  return min;
+}
+
 function idx(row: number, col: number) {
   return row * GRID + col;
 }
@@ -98,18 +115,30 @@ function GridNodes({
 
   const heatmapCenters = useMemo(
     () => [
-      { x: 8.5 * SPACING - ((GRID - 1) * SPACING) / 2, z: 6.5 * SPACING - ((GRID - 1) * SPACING) / 2, radius: 6.5, color: new THREE.Color("#2ECC71") },
+      { x: 8.5 * SPACING - ((GRID - 1) * SPACING) / 2, z: 6.5 * SPACING - ((GRID - 1) * SPACING) / 2, radius: 6.5, color: new THREE.Color("#a8d832") },
       { x: 18 * SPACING - ((GRID - 1) * SPACING) / 2, z: 18 * SPACING - ((GRID - 1) * SPACING) / 2, radius: 5.5, color: new THREE.Color("#ff8a33") },
-      { x: 14 * SPACING - ((GRID - 1) * SPACING) / 2, z: 14 * SPACING - ((GRID - 1) * SPACING) / 2, radius: 4.5, color: new THREE.Color("#3ddf85") },
+      { x: 14 * SPACING - ((GRID - 1) * SPACING) / 2, z: 14 * SPACING - ((GRID - 1) * SPACING) / 2, radius: 4.5, color: new THREE.Color("#2dbf6e") },
     ],
     []
   );
 
   const baseColor = useMemo(() => new THREE.Color("#808080"), []);
-  const greenColor = useMemo(() => new THREE.Color("#2ECC71"), []);
+  const greenColor = useMemo(() => new THREE.Color("#a8d832"), []);
   const dimColor = useMemo(() => new THREE.Color("#d4d4d4"), []);
-  const brightGreen = useMemo(() => new THREE.Color("#3ddf85"), []);
+  const brightGreen = useMemo(() => new THREE.Color("#2dbf6e"), []);
   const orangeColor = useMemo(() => new THREE.Color("#ff8a33"), []);
+
+  const corridorDistances = useMemo(() => {
+    const dists = new Float32Array(NODE_COUNT);
+    for (let r = 0; r < GRID; r++) {
+      for (let c = 0; c < GRID; c++) {
+        dists[r * GRID + c] = corridorDistance(r, c);
+      }
+    }
+    return dists;
+  }, []);
+
+  const tmpColor = useMemo(() => new THREE.Color(), []);
 
   useFrame((_, delta) => {
     if (!meshRef.current) return;
@@ -120,6 +149,7 @@ function GridNodes({
     const pathActivation = easedProgress(p, 0.2, 0.72);
     const rightActivation = easedProgress(p, 0.5, 0.82);
     const routeSettled = easedProgress(p, 0.66, 0.92);
+    const corridorDimStrength = easedProgress(p, 0.03, 0.8);
 
     for (let i = 0; i < NODE_COUNT; i++) {
       const [x, baseY, z] = basePositions[i];
@@ -205,6 +235,16 @@ function GridNodes({
         meshRef.current.setColorAt(i, color);
       }
 
+      const cDist = corridorDistances[i];
+      const valleyT = THREE.MathUtils.smoothstep(cDist, 2.5, 11);
+      const valleyDim = valleyT * corridorDimStrength;
+      if (valleyDim > 0.005) {
+        meshRef.current!.getColorAt(i, tmpColor);
+        tmpColor.multiplyScalar(1 - valleyDim * 0.82);
+        meshRef.current!.setColorAt(i, tmpColor);
+        dummy.scale.multiplyScalar(1 - valleyDim * 0.55);
+      }
+
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
     }
@@ -246,7 +286,7 @@ function SiteCells({
   const colors = useMemo(
     () => ({
       dark: new THREE.Color("#d8d8d8"),
-      green: new THREE.Color("#2ECC71"),
+      green: new THREE.Color("#a8d832"),
       orange: new THREE.Color("#ff7a1a"),
     }),
     []
@@ -403,10 +443,10 @@ function HudLabels({
               pointerEvents: "none",
             }}
           >
-            <div className="flex items-center gap-2 rounded-[2px] border border-[#2ECC71]/40 bg-white/75 px-3 py-2 shadow-sm backdrop-blur-sm">
+            <div className="flex items-center gap-2 rounded-[2px] border border-[#a8d832]/40 bg-white/75 px-3 py-2 shadow-sm backdrop-blur-sm">
               <span
-                className="inline-block h-1.5 w-1.5 rounded-full bg-[#2ECC71]"
-                style={{ boxShadow: "0 0 4px #2ECC71" }}
+                className="inline-block h-1.5 w-1.5 rounded-full bg-[#a8d832]"
+                style={{ boxShadow: "0 0 4px #a8d832" }}
               />
               <div className="flex flex-col leading-none">
                 <span
@@ -484,7 +524,7 @@ function VehicleTrails({
       meshRef.current.setMatrixAt(v, dummy.matrix);
 
       const glow = 0.8 + 0.2 * Math.sin(clock.current * 2.4 + v * 2);
-      const color = new THREE.Color("#2ECC71").multiplyScalar(glow);
+      const color = new THREE.Color("#a8d832").multiplyScalar(glow);
       meshRef.current.setColorAt(v, color);
     }
 
@@ -561,17 +601,22 @@ function ConnectionLines({
           count={positions.length / 3}
         />
       </bufferGeometry>
-      <lineBasicMaterial color="#2ECC71" transparent opacity={0.6} />
+      <lineBasicMaterial color="#a8d832" transparent opacity={0.6} />
     </line>
   );
 }
 
-function GridLines() {
+function GridLines({
+  scrollRef,
+}: {
+  scrollRef: MutableRefObject<number>;
+}) {
   const linesRef = useRef<THREE.LineSegments>(null);
   const clock = useRef(0);
 
-  const { positions, lineCount } = useMemo(() => {
+  const { positions, lineCount, vertexCorridorDists } = useMemo(() => {
     const pts: number[] = [];
+    const dists: number[] = [];
     const offset = ((GRID - 1) * SPACING) / 2;
     let count = 0;
 
@@ -582,36 +627,62 @@ function GridLines() {
 
         if (j < GRID - 1) {
           pts.push(x, 0, z, x, 0, (j + 1) * SPACING - offset);
+          dists.push(corridorDistance(i, j), corridorDistance(i, j + 1));
           count++;
         }
         if (i < GRID - 1) {
           pts.push(x, 0, z, (i + 1) * SPACING - offset, 0, z);
+          dists.push(corridorDistance(i, j), corridorDistance(i + 1, j));
           count++;
         }
       }
     }
 
-    return { positions: new Float32Array(pts), lineCount: count };
+    return {
+      positions: new Float32Array(pts),
+      lineCount: count,
+      vertexCorridorDists: new Float32Array(dists),
+    };
   }, []);
+
+  const colors = useMemo(() => {
+    const c = new Float32Array(vertexCorridorDists.length * 3);
+    for (let i = 0; i < vertexCorridorDists.length; i++) {
+      c[i * 3] = 1;
+      c[i * 3 + 1] = 1;
+      c[i * 3 + 2] = 1;
+    }
+    return c;
+  }, [vertexCorridorDists]);
 
   useFrame((_, delta) => {
     if (!linesRef.current) return;
     clock.current += delta;
+    const p = scrollRef.current;
+    const dimStrength = easedProgress(p, 0.03, 0.8);
 
     const posArr = linesRef.current.geometry.attributes.position.array as Float32Array;
+    const colArr = linesRef.current.geometry.attributes.color.array as Float32Array;
 
     for (let i = 0; i < lineCount; i++) {
       const ii = i * 6;
-      const x1 = posArr[ii];
-      const z1 = posArr[ii + 2];
-      const x2 = posArr[ii + 3];
-      const z2 = posArr[ii + 5];
+      posArr[ii + 1] = gridWave(clock.current, posArr[ii], posArr[ii + 2]);
+      posArr[ii + 4] = gridWave(clock.current, posArr[ii + 3], posArr[ii + 5]);
 
-      posArr[ii + 1] = gridWave(clock.current, x1, z1);
-      posArr[ii + 4] = gridWave(clock.current, x2, z2);
+      const vi = i * 2;
+      for (let v = 0; v < 2; v++) {
+        const dist = vertexCorridorDists[vi + v];
+        const valleyT = THREE.MathUtils.smoothstep(dist, 2.5, 11);
+        const dim = 1 - valleyT * dimStrength * 0.8;
+        const ci = (vi + v) * 3;
+        colArr[ci] = dim;
+        colArr[ci + 1] = dim;
+        colArr[ci + 2] = dim;
+      }
     }
 
     linesRef.current.geometry.attributes.position.needsUpdate = true;
+    linesRef.current.geometry.attributes.color.needsUpdate = true;
   });
 
   return (
@@ -622,8 +693,13 @@ function GridLines() {
           args={[positions, 3]}
           count={positions.length / 3}
         />
+        <bufferAttribute
+          attach="attributes-color"
+          args={[colors, 3]}
+          count={colors.length / 3}
+        />
       </bufferGeometry>
-      <lineBasicMaterial color="#d8d8d8" transparent opacity={0.35} />
+      <lineBasicMaterial color="#d8d8d8" vertexColors transparent opacity={0.35} />
     </lineSegments>
   );
 }
@@ -707,7 +783,7 @@ export default function SpatialGrid({
         <CameraRig scrollRef={scrollRef} />
         <GridNodes scrollRef={scrollRef} />
         <SiteCells scrollRef={scrollRef} />
-        <GridLines />
+        <GridLines scrollRef={scrollRef} />
         <ConnectionLines scrollRef={scrollRef} />
         <VehicleTrails scrollRef={scrollRef} />
         <HudLabels scrollRef={scrollRef} />

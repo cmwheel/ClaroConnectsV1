@@ -5,8 +5,8 @@
   --bg-surface: #EBEBEB;
   --text-primary: #1A1A1A;
   --text-secondary: #6B6B6B;
-  --accent-green: #2ECC71;
-  --accent-green-dim: rgba(46, 204, 113, 0.15);
+  --accent-green: #a8d832;
+  --accent-green-dim: rgba(168, 216, 50, 0.15);
   --white: #FFFFFF;
 }
 
@@ -41,6 +41,14 @@ body {
 ::selection {
   background: var(--accent-green-dim);
   color: var(--text-primary);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 @media (min-width: 768px) {

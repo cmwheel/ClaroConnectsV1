@@ -71,6 +71,7 @@ export default function HeroSection() {
   const textOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const chevronOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
   const vignetteOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+  const valleyOpacity = useTransform(scrollYProgress, [0.05, 0.7], [0, 0.18]);
 
   const cardOpacity = useTransform(scrollYProgress, (p) =>
     easedRange(p, 0.32, 0.96)
@@ -92,6 +93,15 @@ export default function HeroSection() {
           }}
         />
         <SpatialGrid scrollRef={scrollProgressRef} candidateScreenRef={candidateScreenRef} />
+
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-[2]"
+          style={{
+            opacity: valleyOpacity,
+            background:
+              "radial-gradient(ellipse 60% 55% at 50% 50%, transparent 25%, rgba(0,0,0,0.28) 100%)",
+          }}
+        />
 
         <motion.svg
           className="pointer-events-none absolute inset-0 z-20 h-full w-full"
@@ -118,7 +128,7 @@ export default function HeroSection() {
 
         <motion.div
           ref={cardRef}
-          className="pointer-events-none absolute -bottom-8 right-8 z-20 w-[280px] md:right-12"
+          className="pointer-events-none absolute -bottom-16 right-8 z-20 w-[320px] md:right-12"
           style={{ opacity: cardOpacity, y: cardY }}
         >
           <div className="rounded-[2px] border border-orange-400/50 bg-white/90 shadow-lg backdrop-blur-md">

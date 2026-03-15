@@ -78,16 +78,16 @@ function PlaceholderThumbnail({ index }: { index: number }) {
         />
       ))}
       {/* Green accent nodes */}
-      <circle cx={p.cx1} cy={p.cy1} r="5" fill="#2ECC71" opacity="0.7" />
-      <circle cx={p.cx2} cy={p.cy2} r="4" fill="#2ECC71" opacity="0.5" />
-      <circle cx={p.cx3} cy={p.cy3} r="6" fill="#2ECC71" opacity="0.6" />
+      <circle cx={p.cx1} cy={p.cy1} r="5" fill="#a8d832" opacity="0.7" />
+      <circle cx={p.cx2} cy={p.cy2} r="4" fill="#a8d832" opacity="0.5" />
+      <circle cx={p.cx3} cy={p.cy3} r="6" fill="#a8d832" opacity="0.6" />
       {/* Connecting line */}
       <line
         x1={p.cx1}
         y1={p.cy1}
         x2={p.cx2}
         y2={p.cy2}
-        stroke="#2ECC71"
+        stroke="#a8d832"
         strokeWidth="1"
         opacity="0.3"
       />
@@ -96,7 +96,7 @@ function PlaceholderThumbnail({ index }: { index: number }) {
         y1={p.cy2}
         x2={p.cx3}
         y2={p.cy3}
-        stroke="#2ECC71"
+        stroke="#a8d832"
         strokeWidth="1"
         opacity="0.3"
       />
@@ -106,7 +106,7 @@ function PlaceholderThumbnail({ index }: { index: number }) {
 
 export default function ResearchSection() {
   return (
-    <section id="research" className="bg-bg-base py-28 md:py-36">
+    <section id="research" className="bg-bg-base py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <ScrollReveal>
           <div className="flex items-end justify-between">
