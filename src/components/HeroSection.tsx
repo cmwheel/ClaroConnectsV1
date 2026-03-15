@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 
 const SpatialGrid = dynamic(() => import("./SpatialGrid"), { ssr: false });
 
@@ -26,6 +26,7 @@ export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const connectorRafRef = useRef<number | null>(null);
   const scrollProgressRef = useRef(0);
   const candidateScreenRef = useRef({ x: 0, y: 0 });
 
@@ -34,10 +35,6 @@ export default function HeroSection() {
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
-  });
-
-  scrollYProgress.on("change", (v) => {
-    scrollProgressRef.current = v;
   });
 
   const updateConnector = useCallback(() => {
@@ -57,15 +54,33 @@ export default function HeroSection() {
     setConnectorLine({ x1: siteX, y1: siteY, x2: cardAnchorX, y2: cardAnchorY });
   }, []);
 
-  useEffect(() => {
-    let raf: number;
-    const loop = () => {
+  const scheduleConnectorUpdate = useCallback(() => {
+    if (connectorRafRef.current !== null) {
+      cancelAnimationFrame(connectorRafRef.current);
+    }
+
+    connectorRafRef.current = requestAnimationFrame(() => {
+      connectorRafRef.current = null;
       updateConnector();
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
+    });
   }, [updateConnector]);
+
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    scrollProgressRef.current = v;
+    scheduleConnectorUpdate();
+  });
+
+  useEffect(() => {
+    scheduleConnectorUpdate();
+    window.addEventListener("resize", scheduleConnectorUpdate);
+
+    return () => {
+      window.removeEventListener("resize", scheduleConnectorUpdate);
+      if (connectorRafRef.current !== null) {
+        cancelAnimationFrame(connectorRafRef.current);
+      }
+    };
+  }, [scheduleConnectorUpdate]);
 
   const textY = useTransform(scrollYProgress, [0, 0.35], [0, -220]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
@@ -74,15 +89,15 @@ export default function HeroSection() {
   const valleyOpacity = useTransform(scrollYProgress, [0.05, 0.7], [0, 0.18]);
 
   const cardOpacity = useTransform(scrollYProgress, (p) =>
-    easedRange(p, 0.32, 0.96)
+    easedRange(p, 0.28, 0.8)
   );
   const cardY = useTransform(scrollYProgress, (p) => {
-    const progress = easedRange(p, 0.32, 0.96);
+    const progress = easedRange(p, 0.28, 0.8);
     return 12 - progress * 12;
   });
 
   return (
-    <section ref={sectionRef} className="relative h-[300vh]">
+    <section ref={sectionRef} className="relative h-[340vh]">
       <div ref={stickyRef} className="sticky top-0 flex h-screen w-full items-center justify-center overflow-visible bg-bg-base">
         <motion.div
           className="pointer-events-none absolute inset-0 z-30"
@@ -113,16 +128,17 @@ export default function HeroSection() {
             x2={connectorLine.x2}
             y2={connectorLine.y2}
             stroke="#fb923c"
-            strokeWidth="1"
-            strokeDasharray="5 4"
-            strokeOpacity="0.55"
+            strokeWidth="1.35"
+            strokeDasharray="6 5"
+            strokeLinecap="round"
+            strokeOpacity="0.72"
           />
           <circle
             cx={connectorLine.x1}
             cy={connectorLine.y1}
-            r="4"
+            r="4.5"
             fill="#fb923c"
-            fillOpacity="0.7"
+            fillOpacity="0.82"
           />
         </motion.svg>
 
@@ -131,14 +147,14 @@ export default function HeroSection() {
           className="pointer-events-none absolute -bottom-16 right-8 z-20 w-[320px] md:right-12"
           style={{ opacity: cardOpacity, y: cardY }}
         >
-          <div className="rounded-[2px] border border-orange-400/50 bg-white/90 shadow-lg backdrop-blur-md">
+          <div className="rounded-[3px] border border-orange-400/45 bg-white/92 shadow-[0_18px_40px_rgba(0,0,0,0.12)] backdrop-blur-lg">
             <div className="flex items-center gap-2 border-b border-orange-400/25 px-5 py-3">
               <span
                 className="inline-block h-2 w-2 rounded-full bg-orange-400"
                 style={{ boxShadow: "0 0 6px #ff7a1a" }}
               />
               <span className="text-sm font-semibold text-text-primary">
-                Candidate Site
+                Subject Property
               </span>
               <span className="ml-auto text-[11px] font-medium text-orange-500">
                 Evaluating

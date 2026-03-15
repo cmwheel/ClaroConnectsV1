@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo, useState, MutableRefObject } from "react";
+import { useRef, useMemo, MutableRefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -8,9 +8,9 @@ import * as THREE from "three";
 const GRID = 28;
 const SPACING = 1.4;
 const NODE_COUNT = GRID * GRID;
-const WAVE_SPEED = 0.34;
-const WAVE_XZ_FACTOR = 0.24;
-const WAVE_HEIGHT = 0.09;
+const WAVE_SPEED = 0.26;
+const WAVE_XZ_FACTOR = 0.2;
+const WAVE_HEIGHT = 0.045;
 const ROUTE_STEPS: [number, number][] = [
   [9, 8],
   [10, 9],
@@ -78,13 +78,24 @@ function GridNodes({
   }, []);
 
   const { leftSite, rightSite, pathNodes } = useMemo(() => {
-    const left = [idx(8, 6), idx(8, 7), idx(9, 6), idx(9, 7), idx(10, 7)];
+    const left = [
+      idx(8, 6),
+      idx(8, 7),
+      idx(9, 6),
+      idx(9, 7),
+      idx(10, 6),
+      idx(10, 7),
+    ];
     const right = [
+      idx(18, 20),
+      idx(18, 21),
+      idx(18, 22),
+      idx(19, 20),
       idx(19, 21),
       idx(19, 22),
       idx(20, 21),
       idx(20, 22),
-      idx(18, 20),
+      idx(21, 21),
       idx(21, 22),
     ];
 
@@ -98,7 +109,7 @@ function GridNodes({
 
   const ambientGreen = useMemo(() => {
     const indices = new Set<number>();
-    for (let cursor = 0; indices.size < 10 && cursor < NODE_COUNT * 3; cursor++) {
+    for (let cursor = 0; indices.size < 2 && cursor < NODE_COUNT * 3; cursor++) {
       const row = (cursor * 7 + 3) % GRID;
       const col = (cursor * 11 + 5) % GRID;
       const candidate = idx(row, col);
@@ -145,11 +156,11 @@ function GridNodes({
     clock.current += delta;
     const p = scrollRef.current;
 
-    const leftActivation = easedProgress(p, 0.08, 0.26);
-    const pathActivation = easedProgress(p, 0.2, 0.72);
-    const rightActivation = easedProgress(p, 0.5, 0.82);
-    const routeSettled = easedProgress(p, 0.66, 0.92);
-    const corridorDimStrength = easedProgress(p, 0.03, 0.8);
+    const leftActivation = easedProgress(p, 0.08, 0.24);
+    const pathActivation = easedProgress(p, 0.18, 0.6);
+    const rightActivation = easedProgress(p, 0.4, 0.7);
+    const routeSettled = easedProgress(p, 0.54, 0.74);
+    const corridorDimStrength = easedProgress(p, 0.03, 0.7);
 
     for (let i = 0; i < NODE_COUNT; i++) {
       const [x, baseY, z] = basePositions[i];
@@ -166,9 +177,9 @@ function GridNodes({
         const activation = leftActivation;
         const pulse =
           activation > 0.1
-            ? 0.5 + 0.5 * Math.sin(clock.current * 2.2 + i * 0.26)
+            ? 0.5 + 0.5 * Math.sin(clock.current * 1.9 + i * 0.2)
             : 0;
-        const s = 0.09 + activation * 0.12 + pulse * activation * 0.04;
+        const s = 0.095 + activation * 0.12 + pulse * activation * 0.02;
         dummy.scale.setScalar(s);
         const color = dimColor
           .clone()
@@ -178,9 +189,9 @@ function GridNodes({
         const activation = rightActivation;
         const pulse =
           activation > 0.1
-            ? 0.5 + 0.5 * Math.sin(clock.current * 2.2 + i * 0.26)
+            ? 0.5 + 0.5 * Math.sin(clock.current * 1.9 + i * 0.2)
             : 0;
-        const s = 0.09 + activation * 0.12 + pulse * activation * 0.04;
+        const s = 0.095 + activation * 0.12 + pulse * activation * 0.02;
         dummy.scale.setScalar(s);
         const color = dimColor
           .clone()
@@ -191,22 +202,22 @@ function GridNodes({
         const activation = easedProgress(pathActivation, nodeProgress * 0.75, nodeProgress * 0.75 + 0.24);
         const pulse =
           activation > 0.4
-            ? 0.35 + 0.35 * Math.sin(clock.current * 2.8 + pathIdx * 0.7)
+            ? 0.3 + 0.3 * Math.sin(clock.current * 2.1 + pathIdx * 0.55)
             : 0;
-        const s = 0.08 + activation * 0.09 + pulse * activation * 0.02;
+        const s = 0.08 + activation * 0.085 + pulse * activation * 0.014;
         dummy.scale.setScalar(s);
         const color = dimColor
           .clone()
           .lerp(greenColor, activation * (0.6 + pulse * 0.4));
         meshRef.current.setColorAt(i, color);
       } else if (isAmbient) {
-        const ambientPulse = 0.5 + 0.5 * Math.sin(clock.current * 1.6 + i * 0.45);
-        const ambientScale = 0.09 + ambientPulse * 0.04;
-        const fade = 1 - p * 0.3;
+        const ambientPulse = 0.5 + 0.5 * Math.sin(clock.current * 1 + i * 0.28);
+        const fade = Math.max(0.16, 1 - easedProgress(p, 0.16, 0.52) * 0.84);
+        const ambientScale = (0.07 + ambientPulse * 0.014) * fade;
         dummy.scale.setScalar(ambientScale * Math.max(0.3, fade));
         const color = dimColor
           .clone()
-          .lerp(greenColor, ambientPulse * 0.45 * Math.max(0.2, fade));
+          .lerp(greenColor, ambientPulse * 0.16 * fade);
         meshRef.current.setColorAt(i, color);
       } else {
         const dist = Math.sqrt(x * x + z * z);
@@ -227,7 +238,7 @@ function GridNodes({
           }
         }
 
-        const pulse = 0.85 + 0.15 * Math.sin(clock.current * 1.4 + x * 0.2 + z * 0.2);
+        const pulse = 0.9 + 0.1 * Math.sin(clock.current * 1.15 + x * 0.18 + z * 0.18);
         const heatBlend = heatIntensity * heatActivation * pulse;
         const baseScale = (0.06 + routeSettled * 0.02 + heatBlend * 0.06) * fade;
         dummy.scale.setScalar(baseScale);
@@ -298,9 +309,9 @@ function SiteCells({
     const p = scrollRef.current;
 
     const offset = ((GRID - 1) * SPACING) / 2;
-    const primaryActivation = easedProgress(p, 0.08, 0.26);
-    const routeActivation = easedProgress(p, 0.2, 0.74);
-    const settleActivation = easedProgress(p, 0.64, 0.92);
+    const primaryActivation = easedProgress(p, 0.08, 0.22);
+    const routeActivation = easedProgress(p, 0.18, 0.62);
+    const settleActivation = easedProgress(p, 0.5, 0.74);
 
     cellDefs.forEach((cell, i) => {
       const x = (cell.row + 0.5) * SPACING - offset;
@@ -314,32 +325,32 @@ function SiteCells({
       if (cell.type === "primary") {
         const pulse = 0.5 + 0.5 * Math.sin(clock.current * 2.4);
         activation = primaryActivation;
-        scale = 0.54 + activation * 0.28 + pulse * activation * 0.08;
+        scale = 0.58 + activation * 0.32 + pulse * activation * 0.07;
         color = colors.dark
           .clone()
           .lerp(colors.green, activation * (0.72 + pulse * 0.28));
       } else if (cell.type === "secondary") {
         const stagger = (cell.order ?? 0) * 0.22;
-        activation = easedProgress(routeActivation, 0.28 + stagger, 0.56 + stagger);
+        activation = easedProgress(routeActivation, 0.24 + stagger, 0.5 + stagger);
         const pulse =
           activation > 0.45 ? 0.5 + 0.5 * Math.sin(clock.current * 2 + i) : 0;
-        scale = 0.45 + activation * 0.26 + pulse * activation * 0.06;
+        scale = 0.5 + activation * 0.28 + pulse * activation * 0.05;
         color = colors.dark
           .clone()
           .lerp(colors.green, activation * (0.62 + pulse * 0.38));
       } else if (cell.type === "keyCandidate") {
         const phase = cell.phase ?? 0;
-        activation = easedProgress(p, 0.14, 0.82);
+        activation = easedProgress(p, 0.14, 0.72);
         const glow = 0.5 + 0.5 * Math.sin(clock.current * 2.2 + phase * Math.PI);
-        scale = 0.65 + settleActivation * 0.3 + glow * activation * 0.12;
+        scale = 0.7 + settleActivation * 0.3 + glow * activation * 0.1;
         color = colors.dark
           .clone()
           .lerp(colors.orange, activation * (0.7 + glow * 0.3));
       } else {
         const phase = cell.phase ?? 0;
-        activation = easedProgress(p, 0.16 + phase * 0.04, 0.92);
+        activation = easedProgress(p, 0.16 + phase * 0.03, 0.78);
         const glow = 0.45 + 0.55 * Math.sin(clock.current * 1.8 + phase * Math.PI * 1.6);
-        scale = 0.4 + settleActivation * 0.18 + glow * activation * 0.07;
+        scale = 0.44 + settleActivation * 0.18 + glow * activation * 0.06;
         color = colors.dark
           .clone()
           .lerp(colors.orange, activation * (0.46 + glow * 0.54));
@@ -361,8 +372,8 @@ function SiteCells({
 
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, cellDefs.length]}>
-      <planeGeometry args={[SPACING * 0.92, SPACING * 0.92]} />
-      <meshBasicMaterial toneMapped={false} transparent opacity={0.95} side={THREE.DoubleSide} />
+      <planeGeometry args={[SPACING * 1.02, SPACING * 1.02]} />
+      <meshBasicMaterial toneMapped={false} transparent opacity={0.98} side={THREE.DoubleSide} />
     </instancedMesh>
   );
 }
@@ -374,6 +385,8 @@ function HudLabels({
 }) {
   const offset = ((GRID - 1) * SPACING) / 2;
   const clock = useRef(0);
+  const groupRefs = useRef<Array<THREE.Group | null>>([]);
+  const labelRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   const simpleLabels = useMemo(
     () => [
@@ -408,16 +421,23 @@ function HudLabels({
     []
   );
 
-  const [labelOpacities, setLabelOpacities] = useState(() =>
-    simpleLabels.map(() => 0)
-  );
-
   useFrame((_, delta) => {
     clock.current += delta;
     const p = scrollRef.current;
-    setLabelOpacities(
-      simpleLabels.map((l) => easedProgress(p, l.scrollStart, l.scrollEnd))
-    );
+    simpleLabels.forEach((label, i) => {
+      const group = groupRefs.current[i];
+      const labelEl = labelRefs.current[i];
+      if (!group || !labelEl) return;
+
+      const x = (label.row + 0.5) * SPACING - offset;
+      const z = (label.col + 0.5) * SPACING - offset;
+      const opacity = easedProgress(p, label.scrollStart, label.scrollEnd);
+
+      group.position.set(x, 1.8 + gridWave(clock.current, x, z) * 0.55, z);
+      group.visible = opacity > 0.02;
+      labelEl.style.opacity = opacity.toString();
+      labelEl.style.transform = `translateY(${Math.round((1 - opacity) * 8)}px)`;
+    });
   });
 
   return (
@@ -425,47 +445,56 @@ function HudLabels({
       {simpleLabels.map((label, i) => {
         const x = (label.row + 0.5) * SPACING - offset;
         const z = (label.col + 0.5) * SPACING - offset;
-        const wave = gridWave(clock.current, x, z);
-        const opacity = labelOpacities[i];
-        if (opacity < 0.02) return null;
-
         const isPrimary = label.type === "primary";
 
         return (
-          <Html
+          <group
             key={i}
-            position={[x, 1.8 + wave, z]}
-            center
-            distanceFactor={isPrimary ? 14 : 18}
-            style={{
-              opacity,
-              transition: "opacity 0.15s",
-              pointerEvents: "none",
+            ref={(node) => {
+              groupRefs.current[i] = node;
             }}
+            position={[x, 1.8, z]}
           >
-            <div className="flex items-center gap-2 rounded-[2px] border border-[#a8d832]/40 bg-white/75 px-3 py-2 shadow-sm backdrop-blur-sm">
-              <span
-                className="inline-block h-1.5 w-1.5 rounded-full bg-[#a8d832]"
-                style={{ boxShadow: "0 0 4px #a8d832" }}
-              />
-              <div className="flex flex-col leading-none">
+            <Html
+              center
+              distanceFactor={isPrimary ? 14 : 18}
+              style={{ pointerEvents: "none" }}
+            >
+              <div
+                ref={(node) => {
+                  labelRefs.current[i] = node;
+                }}
+                className="flex items-center gap-2 rounded-[2px] border border-[#a8d832]/40 bg-white/78 px-3 py-2 shadow-sm backdrop-blur-sm"
+                style={{
+                  opacity: 0,
+                  transform: "translateY(8px)",
+                  transition: "opacity 0.18s ease, transform 0.18s ease",
+                  willChange: "opacity, transform",
+                }}
+              >
                 <span
-                  className={`whitespace-nowrap font-semibold text-[#1A1A1A] ${
-                    isPrimary ? "text-[12px]" : "text-[10px]"
-                  }`}
-                >
-                  {label.text}
-                </span>
-                <span
-                  className={`whitespace-nowrap text-[#6B6B6B] ${
-                    isPrimary ? "text-[9px]" : "text-[8px]"
-                  }`}
-                >
-                  {label.sub}
-                </span>
+                  className="inline-block h-1.5 w-1.5 rounded-full bg-[#a8d832]"
+                  style={{ boxShadow: "0 0 4px #a8d832" }}
+                />
+                <div className="flex flex-col leading-none">
+                  <span
+                    className={`whitespace-nowrap font-semibold text-[#1A1A1A] ${
+                      isPrimary ? "text-[12px]" : "text-[10px]"
+                    }`}
+                  >
+                    {label.text}
+                  </span>
+                  <span
+                    className={`whitespace-nowrap text-[#6B6B6B] ${
+                      isPrimary ? "text-[9px]" : "text-[8px]"
+                    }`}
+                  >
+                    {label.sub}
+                  </span>
+                </div>
               </div>
-            </div>
-          </Html>
+            </Html>
+          </group>
         );
       })}
     </>
@@ -477,7 +506,7 @@ function VehicleTrails({
 }: {
   scrollRef: MutableRefObject<number>;
 }) {
-  const VEHICLE_COUNT = 3;
+const VEHICLE_COUNT = 2;
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const clock = useRef(0);
@@ -502,7 +531,7 @@ function VehicleTrails({
 
     for (let v = 0; v < VEHICLE_COUNT; v++) {
       const phase = v / VEHICLE_COUNT;
-      const speed = 0.06 + v * 0.012;
+      const speed = 0.05 + v * 0.01;
       const t = ((clock.current * speed + phase) % 1);
       const totalSegments = routePositions.length - 1;
       const segFloat = t * totalSegments;
@@ -516,14 +545,14 @@ function VehicleTrails({
       const wave = gridWave(clock.current, x, z);
 
       const visible = pathActivation > 0.15;
-      const scale = visible ? 0.07 + Math.sin(clock.current * 1.6 + v) * 0.01 : 0;
+      const scale = visible ? 0.062 + Math.sin(clock.current * 1.3 + v) * 0.006 : 0;
 
       dummy.position.set(x, 0.22 + wave, z);
       dummy.scale.setScalar(scale * pathActivation);
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(v, dummy.matrix);
 
-      const glow = 0.8 + 0.2 * Math.sin(clock.current * 2.4 + v * 2);
+      const glow = 0.86 + 0.14 * Math.sin(clock.current * 1.8 + v * 2);
       const color = new THREE.Color("#a8d832").multiplyScalar(glow);
       meshRef.current.setColorAt(v, color);
     }
@@ -717,9 +746,9 @@ function CameraRig({
     const radius = THREE.MathUtils.lerp(18.6, 17.2, scrollTurn);
     const height = THREE.MathUtils.lerp(14.2, 12.6, scrollTurn);
 
-    const driftX = Math.sin(t * 0.09) * 0.45;
-    const driftZ = Math.cos(t * 0.08) * 0.38;
-    const driftY = Math.sin(t * 0.12) * 0.15;
+    const driftX = Math.sin(t * 0.08) * 0.12;
+    const driftZ = Math.cos(t * 0.07) * 0.1;
+    const driftY = Math.sin(t * 0.1) * 0.04;
 
     camera.position.x = Math.sin(yaw) * radius + driftX;
     camera.position.y = height + driftY;
@@ -776,7 +805,7 @@ export default function SpatialGrid({
     <div className="absolute inset-0">
       <Canvas
         camera={{ position: [0, 14, 18], fov: 45, near: 0.1, far: 100 }}
-        dpr={[1, 1.5]}
+        dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >

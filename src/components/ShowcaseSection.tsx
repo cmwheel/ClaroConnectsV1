@@ -27,7 +27,7 @@ export default function ShowcaseSection() {
 
           <div className="relative min-h-[50vh]">
             <Image
-              src="/images/cybercab-shot.jpg"
+              src="/images/waymo-depot.jpg"
               alt="RoboTaxi cybercab"
               fill
               className="object-cover"
@@ -47,7 +47,7 @@ export default function ShowcaseSection() {
         <div className="absolute inset-0 bg-black/20" />
 
         <ScrollReveal>
-          <div className="absolute bottom-8 right-8 z-10 w-[340px] rounded-xl bg-[#a8d832] p-8 md:bottom-12 md:right-12 md:w-[380px]">
+          <div className="absolute bottom-8 right-8 z-10 w-[340px] rounded-xl bg-[#93bf2e] p-8 md:bottom-12 md:right-12 md:w-[380px]">
             <div className="flex items-start justify-between">
               <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/50">
                 Freight

@@ -1,31 +1,37 @@
 "use client";
 
+import Image from "next/image";
 import ScrollReveal from "./ScrollReveal";
 
 const RESEARCH_ITEMS = [
   {
-    id: "research-robotaxi",
-    title: "RoboTaxi Infrastructure: Corridor Readiness in the Sun Belt",
+    id: "research-tesla-semi",
+    title: "The Tesla Semi Advantage",
     excerpt:
-      "Mapping AV-ready urban corridors across Texas, Arizona, and Florida to identify where curb, charging, and dispatch infrastructure creates the strongest launch conditions.",
+      "How Tesla's Class 8 electric truck is outperforming every competitor on range, efficiency, and total cost of ownership — backed by real-world fleet data.",
+    date: "Mar 2026",
+    tag: "Freight",
+    href: "/research/tesla-semi-advantage",
+    image: "/images/article1.jpg",
+  },
+  {
+    id: "research-charging",
+    title: "Who Picks Up the Tab? EV Charging Infrastructure in Industrial Real Estate",
+    excerpt:
+      "The chargers, transformers, and grid upgrades behind every electric truck fleet can cost as much as the trucks themselves. So who pays?",
+    date: "Mar 2026",
+    tag: "Freight",
+    href: "/research/charging-infrastructure-costs",
+    image: "/images/2article1.jpg",
+  },
+  {
+    id: "research-waymo",
+    title: "Waymo vs Tesla: Scaling autonomous fleets",
+    excerpt:
+      "Coming soon.",
     date: "Mar 2026",
     tag: "RoboTaxi",
-  },
-  {
-    id: "research-freight",
-    title: "Freight Infrastructure: Where Autonomous Trucking Scales Next",
-    excerpt:
-      "Our routing and demand models surface the top freight lanes where depot, charging, and transfer-node placement can unlock the next wave of autonomous trucking deployment.",
-    date: "Feb 2026",
-    tag: "Freight",
-  },
-  {
-    id: "research-optimization",
-    title: "Charging Depot Siting: A Geospatial Framework",
-    excerpt:
-      "A new model for identifying optimal charging depot locations by overlaying fleet route density, grid capacity, and land cost data.",
-    date: "Jan 2026",
-    tag: "Optimization",
+    href: "#",
   },
 ];
 
@@ -154,11 +160,21 @@ export default function ResearchSection() {
             <ScrollReveal key={item.title} delay={i * 0.12}>
               <a
                 id={item.id}
-                href="#"
+                href={item.href}
                 className="group flex flex-col overflow-hidden rounded-xl border border-transparent bg-white transition-all duration-300 hover:border-accent-green/15 hover:shadow-xl hover:shadow-accent-green/5"
               >
                 <div className="relative h-48 overflow-hidden">
-                  <PlaceholderThumbnail index={i} />
+                  {"image" in item && item.image ? (
+                    <Image
+                      src={item.image}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  ) : (
+                    <PlaceholderThumbnail index={i} />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent" />
                 </div>
 

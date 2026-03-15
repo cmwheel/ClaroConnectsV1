@@ -3,7 +3,7 @@
 const NAV_LINKS = [
   { label: "Research", href: "#research" },
   { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const SOCIAL_LINKS = [

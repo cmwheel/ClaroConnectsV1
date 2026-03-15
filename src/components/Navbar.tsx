@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -28,7 +28,7 @@ export default function Navbar() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-12">
         <a
-          href="#"
+          href="/"
           className="font-heading text-[15px] font-bold tracking-[0.2em] text-text-primary uppercase"
         >
           Claro Connects

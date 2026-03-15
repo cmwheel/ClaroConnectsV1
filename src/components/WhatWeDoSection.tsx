@@ -7,7 +7,7 @@ import ScrollReveal from "./ScrollReveal";
 const TABS = [
   {
     label: "Site Evaluation",
-    headline: "Scoring and ranking\ncandidate sites.",
+    headline: "Scoring and ranking\nsubject properties.",
     description:
       "We evaluate individual sites against dozens of infrastructure, demand, and regulatory variables — delivering a clear, quantified picture of where to invest.",
   },
@@ -60,6 +60,9 @@ export default function WhatWeDoSection() {
     <section id="about" className="bg-white py-28 md:py-36">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <ScrollReveal>
+          <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.18em] text-text-secondary/40">
+            What We Do
+          </p>
           <nav className="flex items-center gap-8 border-b border-[#e5e5e5] pb-4 overflow-x-auto scrollbar-hide">
             {TABS.map((tab, i) => (
               <button
@@ -180,12 +183,11 @@ function TabVisual({ index }: { index: number }) {
       <div className={common}>
         <svg viewBox="0 0 560 400" className="h-full w-full" fill="none">
           <GridLines />
-          {/* Site candidate markers with score rings */}
           {[
-            { cx: 180, cy: 140, score: 0.88, label: "SITE_A — 88%" },
-            { cx: 340, cy: 180, score: 0.72, label: "SITE_B — 72%" },
-            { cx: 260, cy: 280, score: 0.64, label: "SITE_C — 64%" },
-            { cx: 430, cy: 120, score: 0.91, label: "SITE_D — 91%" },
+            { cx: 180, cy: 140, score: 0.88, label: "SITE A  88%" },
+            { cx: 340, cy: 180, score: 0.72, label: "SITE B  72%" },
+            { cx: 260, cy: 280, score: 0.64, label: "SITE C  64%" },
+            { cx: 430, cy: 120, score: 0.91, label: "SITE D  91%" },
           ].map((s, i) => (
             <g key={i}>
               <circle cx={s.cx} cy={s.cy} r="28" stroke="#a8d832" strokeWidth="1" strokeOpacity="0.15" />
@@ -194,17 +196,16 @@ function TabVisual({ index }: { index: number }) {
               <text x={s.cx + 34} y={s.cy + 4} fontSize="9" fill="#6B6B6B" fontFamily="monospace">{s.label}</text>
             </g>
           ))}
-          {/* Evaluation bars */}
-          <rect x="80" y="340" width="100" height="6" rx="1" fill="#e5e5e5" />
-          <rect x="80" y="340" width="88" height="6" rx="1" fill="#a8d832" fillOpacity="0.5" />
-          <text x="80" y="335" fontSize="8" fill="#9a9a9a" fontFamily="monospace">ELECTRICAL</text>
-          <rect x="210" y="340" width="100" height="6" rx="1" fill="#e5e5e5" />
-          <rect x="210" y="340" width="72" height="6" rx="1" fill="#a8d832" fillOpacity="0.5" />
-          <text x="210" y="335" fontSize="8" fill="#9a9a9a" fontFamily="monospace">PROXIMITY</text>
-          <rect x="340" y="340" width="100" height="6" rx="1" fill="#e5e5e5" />
-          <rect x="340" y="340" width="91" height="6" rx="1" fill="#a8d832" fillOpacity="0.5" />
-          <text x="340" y="335" fontSize="8" fill="#9a9a9a" fontFamily="monospace">DEMAND</text>
-          <text x="80" y="375" fontSize="10" fill="#6B6B6B" fontFamily="monospace">EVALUATING 4 CANDIDATES...</text>
+          <rect x="80" y="338" width="100" height="6" rx="1" fill="#e5e5e5" />
+          <rect x="80" y="338" width="88" height="6" rx="1" fill="#a8d832" fillOpacity="0.5" />
+          <text x="80" y="333" fontSize="8" fill="#9a9a9a" fontFamily="monospace">POWER AVAILABILITY</text>
+          <rect x="210" y="338" width="100" height="6" rx="1" fill="#e5e5e5" />
+          <rect x="210" y="338" width="72" height="6" rx="1" fill="#a8d832" fillOpacity="0.5" />
+          <text x="210" y="333" fontSize="8" fill="#9a9a9a" fontFamily="monospace">HIGHWAY ACCESS</text>
+          <rect x="340" y="338" width="100" height="6" rx="1" fill="#e5e5e5" />
+          <rect x="340" y="338" width="91" height="6" rx="1" fill="#a8d832" fillOpacity="0.5" />
+          <text x="340" y="333" fontSize="8" fill="#9a9a9a" fontFamily="monospace">FLEET DEMAND</text>
+          <text x="80" y="373" fontSize="10" fill="#6B6B6B" fontFamily="monospace">EVALUATING 4 SUBJECT PROPERTIES</text>
         </svg>
       </div>
     );
@@ -215,26 +216,21 @@ function TabVisual({ index }: { index: number }) {
       <div className={common}>
         <svg viewBox="0 0 560 400" className="h-full w-full" fill="none">
           <GridLines />
-          {/* Demand curve */}
           <path d="M80 300 Q140 290 180 260 T280 200 T380 130 T480 90" stroke="#fb923c" strokeWidth="2" strokeOpacity="0.6" />
           <path d="M80 300 Q140 290 180 260 T280 200 T380 130 T480 90 L480 370 L80 370 Z" fill="#fb923c" fillOpacity="0.06" />
-          {/* Confidence band */}
           <path d="M80 310 Q140 300 180 275 T280 220 T380 155 T480 120" stroke="#fb923c" strokeWidth="0.8" strokeOpacity="0.2" strokeDasharray="4 3" />
           <path d="M80 290 Q140 278 180 245 T280 180 T380 105 T480 60" stroke="#fb923c" strokeWidth="0.8" strokeOpacity="0.2" strokeDasharray="4 3" />
-          {/* Projection markers */}
           <line x1="280" y1="60" x2="280" y2="370" stroke="#fb923c" strokeWidth="0.8" strokeOpacity="0.15" strokeDasharray="3 4" />
           <text x="284" y="72" fontSize="9" fill="#fb923c" fontFamily="monospace" fillOpacity="0.6">2028</text>
           <line x1="380" y1="60" x2="380" y2="370" stroke="#fb923c" strokeWidth="0.8" strokeOpacity="0.15" strokeDasharray="3 4" />
           <text x="384" y="72" fontSize="9" fill="#fb923c" fontFamily="monospace" fillOpacity="0.6">2031</text>
-          {/* Data points */}
           {[{x:120,y:288},{x:180,y:260},{x:230,y:230},{x:280,y:200},{x:330,y:165},{x:380,y:130},{x:440,y:100}].map((p,i)=>(
             <circle key={i} cx={p.x} cy={p.y} r="3.5" fill="#fb923c" fillOpacity="0.5" stroke="#fb923c" strokeWidth="1" />
           ))}
-          {/* Y-axis labels */}
           <text x="46" y="305" fontSize="8" fill="#9a9a9a" fontFamily="monospace" textAnchor="end">0</text>
           <text x="46" y="205" fontSize="8" fill="#9a9a9a" fontFamily="monospace" textAnchor="end">5K</text>
           <text x="46" y="105" fontSize="8" fill="#9a9a9a" fontFamily="monospace" textAnchor="end">10K</text>
-          <text x="80" y="385" fontSize="10" fill="#6B6B6B" fontFamily="monospace">DEMAND PROJECTION — TRIPS/DAY</text>
+          <text x="80" y="385" fontSize="10" fill="#6B6B6B" fontFamily="monospace">FLEET DEMAND PROJECTION — TRIPS / DAY</text>
         </svg>
       </div>
     );
@@ -245,13 +241,12 @@ function TabVisual({ index }: { index: number }) {
       <div className={common}>
         <svg viewBox="0 0 560 400" className="h-full w-full" fill="none">
           <GridLines />
-          {/* Metro nodes */}
           {[
-            { cx: 100, cy: 160, r: 18, label: "METRO_A" },
-            { cx: 280, cy: 100, r: 22, label: "METRO_B" },
-            { cx: 460, cy: 150, r: 16, label: "METRO_C" },
-            { cx: 180, cy: 300, r: 14, label: "METRO_D" },
-            { cx: 400, cy: 310, r: 20, label: "METRO_E" },
+            { cx: 100, cy: 160, r: 18, label: "PHX" },
+            { cx: 280, cy: 100, r: 22, label: "DFW" },
+            { cx: 460, cy: 150, r: 16, label: "ATL" },
+            { cx: 180, cy: 300, r: 14, label: "ELP" },
+            { cx: 400, cy: 310, r: 20, label: "HOU" },
           ].map((m, i) => (
             <g key={i}>
               <circle cx={m.cx} cy={m.cy} r={m.r} fill="#a8d832" fillOpacity="0.08" stroke="#a8d832" strokeWidth="1.2" strokeOpacity="0.3" />
@@ -259,7 +254,6 @@ function TabVisual({ index }: { index: number }) {
               <text x={m.cx} y={m.cy - m.r - 6} fontSize="8" fill="#9a9a9a" fontFamily="monospace" textAnchor="middle">{m.label}</text>
             </g>
           ))}
-          {/* Corridor lines */}
           <path d="M100 160 Q190 100 280 100" stroke="#a8d832" strokeWidth="2" strokeOpacity="0.35" />
           <path d="M280 100 Q370 90 460 150" stroke="#a8d832" strokeWidth="1.8" strokeOpacity="0.3" />
           <path d="M100 160 Q130 230 180 300" stroke="#a8d832" strokeWidth="1.5" strokeOpacity="0.25" />
@@ -267,7 +261,6 @@ function TabVisual({ index }: { index: number }) {
           <path d="M180 300 Q290 320 400 310" stroke="#a8d832" strokeWidth="2" strokeOpacity="0.35" />
           <path d="M280 100 Q240 200 180 300" stroke="#a8d832" strokeWidth="1.2" strokeOpacity="0.15" strokeDasharray="6 4" />
           <path d="M280 100 Q340 200 400 310" stroke="#a8d832" strokeWidth="1.2" strokeOpacity="0.15" strokeDasharray="6 4" />
-          {/* Staging points along corridors */}
           {[{x:190,y:118},{x:370,y:112},{x:130,y:230},{x:442,y:230},{x:290,y:314}].map((p,i)=>(
             <g key={i}>
               <rect x={p.x-4} y={p.y-4} width="8" height="8" rx="1" fill="#a8d832" fillOpacity="0.3" stroke="#a8d832" strokeWidth="0.8" />
@@ -283,24 +276,21 @@ function TabVisual({ index }: { index: number }) {
     <div className={common}>
       <svg viewBox="0 0 560 400" className="h-full w-full" fill="none">
         <GridLines />
-        {/* Jurisdiction zones */}
         <rect x="80" y="70" width="180" height="130" rx="4" fill="#8b5cf6" fillOpacity="0.06" stroke="#8b5cf6" strokeWidth="1" strokeOpacity="0.25" strokeDasharray="6 4" />
         <rect x="300" y="90" width="180" height="140" rx="4" fill="#8b5cf6" fillOpacity="0.04" stroke="#8b5cf6" strokeWidth="1" strokeOpacity="0.2" strokeDasharray="6 4" />
         <rect x="140" y="240" width="200" height="100" rx="4" fill="#8b5cf6" fillOpacity="0.05" stroke="#8b5cf6" strokeWidth="1" strokeOpacity="0.22" strokeDasharray="6 4" />
-        {/* Zone labels */}
-        <text x="90" y="90" fontSize="9" fill="#8b5cf6" fontFamily="monospace" fillOpacity="0.7">JURISDICTION_01</text>
-        <text x="310" y="110" fontSize="9" fill="#8b5cf6" fontFamily="monospace" fillOpacity="0.7">JURISDICTION_02</text>
-        <text x="150" y="260" fontSize="9" fill="#8b5cf6" fontFamily="monospace" fillOpacity="0.7">JURISDICTION_03</text>
-        {/* Status indicators */}
+        <text x="90" y="90" fontSize="9" fill="#8b5cf6" fontFamily="monospace" fillOpacity="0.7">JURISDICTION 01</text>
+        <text x="310" y="110" fontSize="9" fill="#8b5cf6" fontFamily="monospace" fillOpacity="0.7">JURISDICTION 02</text>
+        <text x="150" y="260" fontSize="9" fill="#8b5cf6" fontFamily="monospace" fillOpacity="0.7">JURISDICTION 03</text>
         {[
           { x: 130, y: 130, status: "APPROVED", color: "#a8d832" },
-          { x: 130, y: 155, status: "AV_TESTING OK", color: "#a8d832" },
+          { x: 130, y: 155, status: "AV TESTING OK", color: "#a8d832" },
           { x: 130, y: 180, status: "ZONING: COMMERCIAL", color: "#a8d832" },
           { x: 350, y: 145, status: "PENDING REVIEW", color: "#fb923c" },
-          { x: 350, y: 170, status: "AV_RESTRICTED", color: "#ef4444" },
+          { x: 350, y: 170, status: "AV RESTRICTED", color: "#ef4444" },
           { x: 350, y: 195, status: "ZONING: TBD", color: "#fb923c" },
           { x: 200, y: 285, status: "APPROVED", color: "#a8d832" },
-          { x: 200, y: 310, status: "PERMIT_REQ", color: "#fb923c" },
+          { x: 200, y: 310, status: "PERMIT REQ", color: "#fb923c" },
         ].map((s, i) => (
           <g key={i}>
             <circle cx={s.x - 8} cy={s.y - 3} r="3" fill={s.color} fillOpacity="0.6" />
