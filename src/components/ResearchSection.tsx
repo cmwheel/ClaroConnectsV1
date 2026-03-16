@@ -25,13 +25,14 @@ const RESEARCH_ITEMS = [
     image: "/images/2article1.jpg",
   },
   {
-    id: "research-waymo",
-    title: "Waymo vs Tesla: Scaling autonomous fleets",
+    id: "research-ev-investment",
+    title: "Why EV Charging Is the Infrastructure Investment of the Decade",
     excerpt:
-      "Coming soon.",
+      "A $40–48B market today, headed to $200–400B+. Tesla is selling the picks and shovels.",
     date: "Mar 2026",
-    tag: "RoboTaxi",
-    href: "#",
+    tag: "Freight",
+    href: "/research/ev-charging-investment",
+    image: "/images/ev-charging-article1.jpg",
   },
 ];
 
@@ -136,7 +137,7 @@ export default function ResearchSection() {
               </p>
             </div>
             <a
-              href="#"
+              href="/research"
               className="text-sm font-medium text-text-secondary transition-colors hover:text-accent-green"
             >
               View All &rarr;

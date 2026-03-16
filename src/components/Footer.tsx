@@ -1,7 +1,7 @@
 "use client";
 
 const NAV_LINKS = [
-  { label: "Research", href: "#research" },
+  { label: "Research", href: "/research" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "/contact" },
 ];
