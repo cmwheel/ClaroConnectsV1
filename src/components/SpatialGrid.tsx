@@ -304,7 +304,8 @@ function SiteCells({
   );
 
   useFrame((_, delta) => {
-    if (!meshRef.current) return;
+    const mesh = meshRef.current;
+    if (!mesh) return;
     clock.current += delta;
     const p = scrollRef.current;
 
@@ -360,13 +361,13 @@ function SiteCells({
       dummy.rotation.set(-Math.PI / 2, 0, 0);
       dummy.scale.set(scale, scale, 1);
       dummy.updateMatrix();
-      meshRef.current.setMatrixAt(i, dummy.matrix);
-      meshRef.current.setColorAt(i, color);
+      mesh.setMatrixAt(i, dummy.matrix);
+      mesh.setColorAt(i, color);
     });
 
-    meshRef.current.instanceMatrix.needsUpdate = true;
-    if (meshRef.current.instanceColor) {
-      meshRef.current.instanceColor.needsUpdate = true;
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) {
+      mesh.instanceColor.needsUpdate = true;
     }
   });
 
@@ -622,7 +623,7 @@ function ConnectionLines({
   });
 
   return (
-    <line ref={lineRef}>
+    <line ref={lineRef as never}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
