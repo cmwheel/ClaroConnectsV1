@@ -9,7 +9,7 @@ const TABS = [
     label: "Site Evaluation",
     headline: "Scoring and ranking\nsubject properties.",
     description:
-      "We evaluate individual sites against dozens of infrastructure, demand, and regulatory variables — delivering a clear, quantified picture of where to invest.",
+      "Understanding what makes a site work: power access, highway proximity, fleet demand, and the other variables that determine whether a location pencils out.",
   },
   {
     label: "Demand Forecasting",
@@ -21,13 +21,13 @@ const TABS = [
     label: "Corridor Mapping",
     headline: "Charting freight and\nRoboTaxi corridors.",
     description:
-      "We map the physical corridors connecting metro areas and freight networks — identifying the routes and staging points that will anchor autonomous operations.",
+      "We map the physical corridors connecting metro areas and freight networks, identifying the routes and staging points that will anchor autonomous operations.",
   },
   {
     label: "Regulatory Intelligence",
     headline: "Navigating zoning, permits,\nand AV policy.",
     description:
-      "We track and analyze the regulatory landscape — zoning restrictions, permitting timelines, and emerging AV policy — so infrastructure decisions are never blindsided.",
+      "We track and analyze the regulatory landscape: zoning restrictions, permitting timelines, and emerging AV policy, so infrastructure decisions are never blindsided.",
   },
 ];
 

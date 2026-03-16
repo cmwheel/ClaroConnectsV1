@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
+import {
+  ResearchArticleByline,
+  ResearchArticleHero,
+  RelatedArticles,
+} from "@/components/research/ResearchArticleShell";
 import Chart from "chart.js/auto";
 
 const C = {
@@ -399,80 +402,22 @@ export default function ChargingInfrastructureArticle() {
     <>
       <Navbar />
       <main className="bg-bg-base">
-        <header className="relative min-h-[48vh] overflow-hidden bg-bg-base pt-24 pb-8 md:min-h-[44vh] md:pt-28 md:pb-10">
-          <div className="absolute inset-y-0 right-0 flex w-[58%] items-end justify-center pt-12 md:w-[55%] md:pt-16">
-            <div className="relative h-[92%] w-full">
-              <Image
-                src="/images/2article1.jpg"
-                alt="EV charging infrastructure at industrial depot"
-                fill
-                className="object-cover object-left-top"
-                priority
-                sizes="58vw"
-              />
-            </div>
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: [
-                  "linear-gradient(to right, var(--bg-base) 0%, rgba(245,245,245,0.7) 22%, transparent 42%)",
-                  "linear-gradient(to left, rgba(245,245,245,0.5) 0%, transparent 8%)",
-                  "linear-gradient(to bottom, rgba(245,245,245,0.4) 0%, transparent 6%)",
-                  "linear-gradient(to top, rgba(245,245,245,0.4) 0%, transparent 6%)",
-                ].join(", "),
-              }}
-            />
-          </div>
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-bg-base to-transparent" />
+        <ResearchArticleHero
+          eyebrow="Infrastructure Deep Dive"
+          title="Who Picks Up the Tab? EV Charging Infrastructure in Industrial Real Estate"
+          description="The chargers, transformers, and grid upgrades behind every electric truck fleet can cost as much as the trucks themselves. So who pays?"
+          imageSrc="/images/2article1.jpg"
+          imageAlt="EV charging infrastructure at industrial depot"
+          imageClassName="object-cover object-left-top"
+        />
 
-          <div className="relative z-10 flex items-center py-6 md:py-8">
-            <div className="mx-auto w-full max-w-7xl px-6 md:px-12">
-              <div className="max-w-lg">
-                <motion.p
-                  className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent-green"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.05 }}
-                >
-                  Infrastructure Deep Dive
-                </motion.p>
-                <motion.h1
-                  className="font-heading mt-2 text-3xl font-bold leading-[1.15] tracking-tight text-text-primary md:text-4xl lg:text-5xl"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-                >
-                  Who Picks Up the Tab? EV Charging Infrastructure in Industrial Real Estate
-                </motion.h1>
-                <motion.p
-                  className="mt-3 max-w-lg text-[15px] leading-relaxed text-text-secondary md:text-base"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-                >
-                  The chargers, transformers, and grid upgrades behind every electric truck fleet can cost as much as the trucks themselves. So who pays?
-                </motion.p>
-              </div>
-            </div>
-          </div>
-        </header>
+        <ResearchArticleByline
+          authorName="Charlie Wheeler"
+          date="March 15, 2026"
+          readTime="15 min read"
+        />
 
-        <div className="border-y border-black/5 bg-white">
-          <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-3 md:px-12">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-green/15 text-[11px] font-bold text-accent-green">
-                CW
-              </div>
-              <div>
-                <p className="text-[13px] font-semibold text-text-primary">Charlie Wheeler</p>
-                <p className="text-[11px] text-text-secondary">March 15, 2026</p>
-              </div>
-            </div>
-            <span className="text-[11px] font-medium text-text-secondary">15 min read</span>
-          </div>
-        </div>
-
-        <article className="mx-auto max-w-3xl px-6 py-14 md:px-12 md:py-20">
+        <article className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-14 md:px-12 md:py-20">
           {/* Section 1: The Bill Nobody Talks About */}
           <ScrollReveal>
             <h2 className="font-heading text-2xl font-bold leading-tight tracking-tight text-text-primary md:text-3xl">
@@ -928,6 +873,7 @@ export default function ChargingInfrastructureArticle() {
           </ScrollReveal>
         </article>
       </main>
+      <RelatedArticles currentHref="/research/charging-infrastructure-costs" />
       <Footer />
     </>
   );

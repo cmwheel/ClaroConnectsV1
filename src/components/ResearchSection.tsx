@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import ScrollReveal from "./ScrollReveal";
 
 const RESEARCH_ITEMS = [
@@ -8,11 +9,12 @@ const RESEARCH_ITEMS = [
     id: "research-tesla-semi",
     title: "The Tesla Semi Advantage",
     excerpt:
-      "How Tesla's Class 8 electric truck is outperforming every competitor on range, efficiency, and total cost of ownership — backed by real-world fleet data.",
+      "How Tesla's Class 8 electric truck is outperforming every competitor on range, efficiency, and total cost of ownership, backed by real-world fleet data.",
     date: "Mar 2026",
     tag: "Freight",
     href: "/research/tesla-semi-advantage",
     image: "/images/article1.jpg",
+    imageAlt: "Tesla Semi electric truck at a charging depot",
   },
   {
     id: "research-charging",
@@ -23,6 +25,7 @@ const RESEARCH_ITEMS = [
     tag: "Freight",
     href: "/research/charging-infrastructure-costs",
     image: "/images/2article1.jpg",
+    imageAlt: "EV charging infrastructure at an industrial real estate site",
   },
   {
     id: "research-ev-investment",
@@ -33,6 +36,7 @@ const RESEARCH_ITEMS = [
     tag: "Freight",
     href: "/research/ev-charging-investment",
     image: "/images/ev-charging-article1.jpg",
+    imageAlt: "Electric vehicle charging station network",
   },
 ];
 
@@ -118,11 +122,8 @@ export default function ResearchSection() {
         <ScrollReveal>
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-sm font-medium uppercase tracking-[0.15em] text-text-secondary">
-                Latest Research
-              </p>
-              <h2 className="font-heading mt-3 text-3xl font-bold tracking-tight text-text-primary md:text-4xl">
-                Published findings.
+              <h2 className="font-heading text-3xl font-bold tracking-tight text-text-primary md:text-4xl">
+                Research
               </h2>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-text-secondary">
                 Our work is organized across two core lanes:{" "}
@@ -136,12 +137,12 @@ export default function ResearchSection() {
                 .
               </p>
             </div>
-            <a
+            <Link
               href="/research"
               className="text-sm font-medium text-text-secondary transition-colors hover:text-accent-green"
             >
               View All &rarr;
-            </a>
+            </Link>
           </div>
         </ScrollReveal>
 
@@ -159,7 +160,7 @@ export default function ResearchSection() {
         <div className="md-grid-3 mt-14 grid gap-8 md:grid-cols-3">
           {RESEARCH_ITEMS.map((item, i) => (
             <ScrollReveal key={item.title} delay={i * 0.12}>
-              <a
+              <Link
                 id={item.id}
                 href={item.href}
                 className="group flex flex-col overflow-hidden rounded-xl border border-transparent bg-white transition-all duration-300 hover:border-accent-green/15 hover:shadow-xl hover:shadow-accent-green/5"
@@ -168,7 +169,7 @@ export default function ResearchSection() {
                   {"image" in item && item.image ? (
                     <Image
                       src={item.image}
-                      alt=""
+                      alt={item.imageAlt}
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 33vw"
@@ -212,7 +213,7 @@ export default function ResearchSection() {
                     </svg>
                   </div>
                 </div>
-              </a>
+              </Link>
             </ScrollReveal>
           ))}
         </div>

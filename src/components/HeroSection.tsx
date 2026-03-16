@@ -200,8 +200,8 @@ export default function HeroSection() {
               ease: [0.25, 0.1, 0.25, 1],
             }}
           >
-            We find the sites, corridors, and infrastructure plays before
-            they&apos;re obvious.
+            Exploring the sites, corridors, and infrastructure that
+            autonomous fleets will need.
           </motion.p>
 
           <motion.div

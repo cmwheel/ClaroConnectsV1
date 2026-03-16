@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 const NAV_LINKS = [
@@ -28,12 +29,12 @@ export default function Navbar() {
       }}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-12">
-        <a
+        <Link
           href="/"
           className="font-heading text-[15px] font-bold tracking-[0.2em] text-text-primary uppercase"
         >
           Claro Connects
-        </a>
+        </Link>
 
         <div className="flex items-center gap-8">
           <details className="group relative">
@@ -66,16 +67,27 @@ export default function Navbar() {
             </div>
           </details>
 
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="group relative text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
-            >
-              {link.label}
-              <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent-green transition-all duration-300 group-hover:w-full" />
-            </a>
-          ))}
+          {NAV_LINKS.map((link) =>
+            link.href.startsWith("/") ? (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="group relative text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
+              >
+                {link.label}
+                <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent-green transition-all duration-300 group-hover:w-full" />
+              </Link>
+            ) : (
+              <a
+                key={link.label}
+                href={link.href}
+                className="group relative text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
+              >
+                {link.label}
+                <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent-green transition-all duration-300 group-hover:w-full" />
+              </a>
+            )
+          )}
         </div>
       </div>
     </motion.nav>

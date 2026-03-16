@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import ScrollReveal from "./ScrollReveal";
 
 export default function ShowcaseSection() {
@@ -18,9 +19,9 @@ export default function ShowcaseSection() {
                 Where the ride starts.
               </h2>
               <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-white/50">
-                Autonomous ride-hailing needs a physical footprint — depots,
-                charging, curbside pickup zones. We find the sites that make
-                launch possible.
+                Autonomous ride-hailing needs a physical footprint: depots,
+                charging, curbside pickup zones. We&apos;re researching what
+                makes a site viable.
               </p>
             </ScrollReveal>
           </div>
@@ -57,15 +58,15 @@ export default function ShowcaseSection() {
             <h3 className="font-heading mt-5 text-2xl font-bold leading-snug tracking-tight text-black md:text-[1.65rem]">
               Where the cargo moves.
             </h3>
-            <a
-              href="#"
+            <Link
+              href="/research"
               className="mt-8 inline-flex items-center gap-3 rounded-lg bg-black/10 px-5 py-3 text-xs font-medium uppercase tracking-[0.12em] text-black/70 transition-colors hover:bg-black/20"
             >
               Learn More
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </a>
+            </Link>
           </div>
         </ScrollReveal>
       </section>

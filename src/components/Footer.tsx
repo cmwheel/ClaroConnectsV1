@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 const NAV_LINKS = [
   { label: "Research", href: "/research" },
   { label: "About", href: "#about" },
@@ -42,27 +44,37 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-14 md:px-12">
         <div className="flex flex-col items-start justify-between gap-10 md:flex-row md:items-center">
           <div>
-            <a
-              href="#"
+            <Link
+              href="/"
               className="font-heading text-[14px] font-bold tracking-[0.2em] text-text-primary uppercase"
             >
               Claro Connects
-            </a>
+            </Link>
             <p className="mt-2 text-sm text-text-secondary">
               Mapping the physical future of autonomy.
             </p>
           </div>
 
           <nav className="flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-sm text-text-secondary transition-colors hover:text-text-primary"
-              >
-                {link.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((link) =>
+              link.href.startsWith("/") ? (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
           </nav>
 
           <div className="flex items-center gap-5">
